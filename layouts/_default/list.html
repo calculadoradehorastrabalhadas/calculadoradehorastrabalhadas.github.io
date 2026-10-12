@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section class="article-layout">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}<div class="content">{{ . }}</div>{{ end }}
+  {{ if eq .Section "glossario" }}
+    <div class="alphabet" aria-label="Índice alfabético">
+      {{ range (slice "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "L" "M" "N" "O" "P" "R" "S" "T" "V") }}<a href="#letra-{{ . | lower }}">{{ . }}</a>{{ end }}
+    </div>
+    {{ $pages := .Pages.ByTitle }}
+    {{ range (slice "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "L" "M" "N" "O" "P" "R" "S" "T" "V") }}
+      {{ $letter := . }}
+      {{ $matching := where $pages "Title" "like" (printf "^%s.*" $letter) }}
+      {{ if $matching }}
+        <h2 id="letra-{{ $letter | lower }}">{{ $letter }}</h2>
+        <ul class="glossary-list">{{ range $matching }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+      {{ end }}
+    {{ end }}
+  {{ else }}
+    <div class="card-grid">
+      {{ range .Pages.ByTitle }}
+      <article class="card"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description }}</p><a href="{{ .RelPermalink }}">Ler conteúdo</a></article>
+      {{ end }}
+    </div>
+  {{ end }}
+</section>
+{{ end }}

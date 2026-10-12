@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="article-layout content">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.intro }}<p class="lead">{{ . }}</p>{{ end }}
+  {{ if .Date }}<p class="meta-line">Revisado em {{ .Lastmod.Format "02/01/2006" }} · {{ .Params.author | default site.Params.author }}</p>{{ end }}
+  {{ .Content }}
+  {{ if eq .Section "glossario" }}
+    {{ if ne .RelPermalink "/glossario/" }}
+      <p><a href="/">Voltar à calculadora de horas trabalhadas</a></p>
+    {{ end }}
+  {{ else if .Params.show_author }}
+    <aside class="author-box">
+      <h2>Sobre a equipe editorial</h2>
+      <p>O conteúdo é preparado para explicar cálculos de jornada com clareza, exemplos reproduzíveis e referências públicas. Credenciais individuais só serão publicadas após confirmação.</p>
+    </aside>
+  {{ end }}
+</article>
+{{ end }}

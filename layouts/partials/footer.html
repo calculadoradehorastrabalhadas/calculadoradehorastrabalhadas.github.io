@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand" href="/">{{ site.Title }}</a>
+      <p>Uma ferramenta gratuita para entender e calcular durações de trabalho. Os resultados são informativos e não substituem orientação profissional.</p>
+    </div>
+    <div>
+      <h2>Conteúdo</h2>
+      <ul class="footer-links">
+        <li><a href="/glossario/">Glossário</a></li>
+        <li><a href="/como-calcular-horas-trabalhadas/">Guias de cálculo</a></li>
+        <li><a href="/sobre/">Sobre o projeto</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Informações</h2>
+      <ul class="footer-links">
+        <li><a href="/contato/">Contato</a></li>
+        <li><a href="/politica-de-privacidade/">Política de Privacidade</a></li>
+        <li><a href="/termos-de-uso/">Termos de Uso</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+{{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

@@ -1,0 +1,23 @@
+baseURL = "https://calculadoradehorastrabalhadas.github.io/"
+languageCode = "pt-BR"
+defaultContentLanguage = "pt-br"
+title = "Calculadora de Horas Trabalhadas"
+enableRobotsTXT = true
+[pagination]
+  pagerSize = 12
+[permalinks]
+  [permalinks.page]
+    glossario = "/glossario/:slug/"
+[params]
+  description = "Calcule horas trabalhadas, entenda jornadas e consulte um glossário prático sobre horários, intervalos e horas extras no Brasil."
+  author = "Equipe editorial"
+  defaultImage = "/images/og-default.png"
+  adsenseClient = ""
+  adsenseSlot = ""
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]

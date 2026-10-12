@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://calculadoradehorastrabalhadas.github.io/sitemap.xml

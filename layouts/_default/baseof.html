@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <title>{{ .Title }}</title>
+  {{ partial "head.html" . }}
+  {{ partial "schema.html" . }}
+</head>
+<body>
+  {{ partial "navbar.html" . }}
+  <main class="main" id="conteudo">
+    <div class="container">
+      {{ block "main" . }}{{ end }}
+    </div>
+  </main>
+  {{ partial "footer.html" . }}
+</body>
+</html>
