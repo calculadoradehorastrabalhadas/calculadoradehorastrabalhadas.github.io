@@ -1,0 +1,23 @@
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="/">Horas Trabalhadas</a>
+    <button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <nav class="nav" id="menu" aria-label="Menu principal">
+      <ul>
+      {{- $cur := .RelPermalink -}}
+      {{- range site.Menus.main }}
+        {{- $active := or (eq $cur .URL) (and (ne .URL "/") (hasPrefix $cur .URL)) }}
+        <li><a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
+      {{- end }}
+      </ul>
+    </nav>
+  </div>
+</header>
+<noscript><style>.nav{display:block!important;position:static!important}.burger{display:none!important}</style></noscript>
+<script>
+(function(){var b=document.querySelector(".burger"),h=document.querySelector(".site-header");
+b.addEventListener("click",function(){var o=h.classList.toggle("open");b.setAttribute("aria-expanded",o);b.setAttribute("aria-label",o?"Fechar menu":"Abrir menu")});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&h.classList.contains("open")){b.click();b.focus()}});})();
+</script>

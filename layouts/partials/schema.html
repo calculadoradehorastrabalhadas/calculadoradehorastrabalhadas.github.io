@@ -1,0 +1,63 @@
+{{- $p := . -}}
+{{- $base := site.Home.Permalink -}}
+{{- $a := site.Data.author -}}
+{{- $org := printf "%s#organization" $base -}}
+{{- $web := printf "%s#website" $base -}}
+{{- $per := printf "%sautor/#person" $base -}}
+{{- $title := cond .IsHome site.Params.homeTitle (or .Params.seoTitle .Title) -}}
+{{- $desc := or .Params.description site.Params.description -}}
+{{- $g := slice -}}
+
+{{- $g = $g | append (dict "@type" "Organization" "@id" $org "name" site.Title "url" $base "description" site.Params.description) -}}
+{{- $g = $g | append (dict "@type" "WebSite" "@id" $web "url" $base "name" site.Title "inLanguage" "pt-BR" "publisher" (dict "@id" $org)) -}}
+{{- $g = $g | append (dict "@type" "Person" "@id" $per "name" $a.name "jobTitle" $a.role "description" $a.short "url" (absURL "autor/") "knowsAbout" $a.expertise "worksFor" (dict "@id" $org)) -}}
+
+{{- if ne .Kind "404" -}}
+  {{- $isTerm := and (eq .Section "glosario") .IsPage -}}
+  {{- $isHub := and (eq .Section "glosario") (not .IsPage) -}}
+  {{- $type := "WebPage" -}}
+  {{- if eq (.Params.layout | default "") "autor" }}{{ $type = "ProfilePage" -}}
+  {{- else if $isTerm }}{{ $type = "Article" -}}
+  {{- else if $isHub }}{{ $type = "CollectionPage" -}}
+  {{- else if .Params.schemaType }}{{ $type = .Params.schemaType }}{{ end -}}
+  {{- $pageID := printf "%s#%s" .Permalink (lower $type) -}}
+  {{- $node := dict "@type" $type "@id" $pageID "url" .Permalink "name" $title "description" $desc "inLanguage" "pt-BR" "isPartOf" (dict "@id" $web) -}}
+  {{- if not .IsHome }}{{ $node = merge $node (dict "breadcrumb" (dict "@id" (printf "%s#breadcrumb" .Permalink))) }}{{ end -}}
+  {{- if not .Date.IsZero }}{{ $node = merge $node (dict "datePublished" (.Date.Format "2006-01-02") "dateModified" (.Lastmod.Format "2006-01-02")) }}{{ end -}}
+  {{- if eq $type "Article" }}{{ $node = merge $node (dict "headline" $title "author" (dict "@id" $per) "publisher" (dict "@id" $org) "mainEntityOfPage" .Permalink) }}{{ end -}}
+  {{- if eq $type "ProfilePage" }}{{ $node = merge $node (dict "mainEntity" (dict "@id" $per)) }}{{ end -}}
+  {{- $g = $g | append $node -}}
+
+  {{- if not .IsHome -}}
+    {{- $crumbs := slice -}}
+    {{- $items := partial "breadcrumb-items.html" . -}}
+    {{- range $i, $e := $items -}}
+      {{- $crumbs = $crumbs | append (dict "@type" "ListItem" "position" (add $i 1) "name" $e.name "item" (absURL $e.url)) -}}
+    {{- end -}}
+    {{- $g = $g | append (dict "@type" "BreadcrumbList" "@id" (printf "%s#breadcrumb" .Permalink) "itemListElement" $crumbs) -}}
+  {{- end -}}
+
+  {{- if .IsHome -}}
+    {{- $g = $g | append (dict "@type" "WebApplication" "@id" (printf "%s#app" $base) "name" site.Title "url" $base "description" $desc "applicationCategory" "UtilitiesApplication" "operatingSystem" "Web" "inLanguage" "pt-BR" "offers" (dict "@type" "Offer" "price" "0" "priceCurrency" "BRL")) -}}
+    {{- with .Params.faq -}}
+      {{- $qs := slice -}}
+      {{- range . -}}
+        {{- $qs = $qs | append (dict "@type" "Question" "name" .q "acceptedAnswer" (dict "@type" "Answer" "text" .a)) -}}
+      {{- end -}}
+      {{- $g = $g | append (dict "@type" "FAQPage" "@id" (printf "%s#faq" $base) "inLanguage" "pt-BR" "mainEntity" $qs) -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $setID := printf "%sglosario/#definedtermset" $base -}}
+  {{- if $isTerm -}}
+    {{- $g = $g | append (dict "@type" "DefinedTerm" "@id" (printf "%s#definedterm" .Permalink) "name" (.Params.term | default .Title) "description" $desc "url" .Permalink "inDefinedTermSet" (dict "@id" $setID)) -}}
+  {{- end -}}
+  {{- if $isHub -}}
+    {{- $terms := slice -}}
+    {{- range .Pages -}}
+      {{- $terms = $terms | append (dict "@type" "DefinedTerm" "name" (.Params.term | default .Title) "url" .Permalink) -}}
+    {{- end -}}
+    {{- $g = $g | append (dict "@type" "DefinedTermSet" "@id" $setID "name" $title "url" .Permalink "inLanguage" "pt-BR" "hasDefinedTerm" $terms) -}}
+  {{- end -}}
+{{- end -}}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $g | jsonify | safeJS }}</script>

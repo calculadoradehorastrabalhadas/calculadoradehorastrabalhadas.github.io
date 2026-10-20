@@ -1,0 +1,8 @@
+{{- $items := slice (dict "name" "Início" "url" "/") -}}
+{{- range .Ancestors.Reverse -}}
+{{- if not .IsHome -}}
+{{- $items = $items | append (dict "name" (.Params.breadcrumb | default .Title) "url" .RelPermalink) -}}
+{{- end -}}
+{{- end -}}
+{{- $items = $items | append (dict "name" (.Params.breadcrumb | default .Title) "url" .RelPermalink) -}}
+{{- return $items -}}

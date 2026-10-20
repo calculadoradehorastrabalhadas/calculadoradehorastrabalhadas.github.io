@@ -1,0 +1,28 @@
+{{ define "main" }}
+<article class="prose">
+<h1>{{ .Title }}</h1>
+{{- if eq .Section "glosario" }}
+{{ partial "byline.html" . }}
+{{- else if .Params.showdate }}
+<p class="byline">Atualizado em <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "02/01/2006" }}</time></p>
+{{- end }}
+{{ .Content }}
+{{- with .Params.source_url }}
+<p class="source">Fonte: <a href="{{ . }}" rel="noopener">{{ $.Params.source_name }}</a></p>
+{{- end }}
+</article>
+{{- if eq .Section "glosario" }}
+{{- with where .CurrentSection.Pages "Permalink" "ne" .Permalink }}
+<nav class="related" aria-label="Veja também">
+  <h2>Veja também</h2>
+  <ul>
+  {{- range . }}
+    <li><a href="{{ .RelPermalink }}">{{ .Params.term | default .Title }}</a></li>
+  {{- end }}
+  </ul>
+  <p>Voltar para a <a href="/">calculadora de horas trabalhadas</a> ou para o <a href="/glosario/">glossário</a>.</p>
+</nav>
+{{- end }}
+{{ partial "author-box.html" . }}
+{{- end }}
+{{ end }}

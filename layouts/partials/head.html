@@ -1,0 +1,22 @@
+{{- $title := cond .IsHome site.Params.homeTitle (or .Params.seoTitle .Title) -}}
+{{- $desc := or .Params.description site.Params.description -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+{{ if eq .Kind "404" }}<meta name="robots" content="noindex,follow">{{ else }}<meta name="robots" content="index,follow,max-image-preview:large">{{ end }}
+<meta name="author" content="{{ site.Data.author.name }}">
+<meta name="theme-color" content="#1d4ed8">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/InterVariable-latin.woff2" as="font" type="font/woff2" crossorigin>
+{{- $css := resources.Get "css/main.css" | minify }}
+<style>{{ $css.Content | safeCSS }}</style>
+{{- partial "schema.html" . -}}

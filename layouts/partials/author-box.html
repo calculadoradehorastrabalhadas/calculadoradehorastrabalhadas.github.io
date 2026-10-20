@@ -1,0 +1,9 @@
+{{- $a := site.Data.author -}}
+<aside class="author-box" aria-label="Sobre a autora">
+  <span class="avatar" aria-hidden="true">{{ $a.initials }}</span>
+  <div>
+    <p class="who"><a href="/autor/">{{ $a.name }}</a></p>
+    <p class="role">{{ $a.role }}</p>
+    <p>{{ $a.short }}</p>
+  </div>
+</aside>

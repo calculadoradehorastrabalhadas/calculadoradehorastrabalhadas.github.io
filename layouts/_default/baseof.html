@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+{{- partial "head.html" . -}}
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+{{- partial "header.html" . -}}
+<main class="wrap" id="conteudo">
+{{- partial "breadcrumb.html" . -}}
+{{- block "main" . }}{{ end -}}
+</main>
+{{- partial "footer.html" . -}}
+</body>
+</html>

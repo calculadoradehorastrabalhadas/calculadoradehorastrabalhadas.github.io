@@ -1,0 +1,36 @@
+{{ define "main" }}
+{{- $a := site.Data.author -}}
+<article class="prose">
+  <header class="author-head">
+    <span class="avatar big" aria-hidden="true">{{ $a.initials }}</span>
+    <div>
+      <h1>{{ $a.name }}</h1>
+      <p class="role">{{ $a.role }}</p>
+    </div>
+  </header>
+  {{- range $a.bio }}
+  <p>{{ . }}</p>
+  {{- end }}
+  <h2>Áreas de atuação</h2>
+  <ul>
+  {{- range $a.expertise }}
+    <li>{{ . }}</li>
+  {{- end }}
+  </ul>
+  <h2>Experiência e formação</h2>
+  <ul>
+  {{- range $a.experience }}
+    <li>{{ . }}</li>
+  {{- end }}
+  </ul>
+  {{- with site.GetPage "/glosario" }}
+  <h2>Conteúdos da autora</h2>
+  <ul>
+  {{- range .Pages.ByTitle }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{- end }}
+  </ul>
+  {{- end }}
+  {{ .Content }}
+</article>
+{{ end }}

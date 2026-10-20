@@ -1,0 +1,42 @@
+{{- $days := slice
+  (dict "n" "Seg" "l" "Segunda-feira" "e" "08:00" "s" "17:00" "b" "60" "t" "08:00")
+  (dict "n" "Ter" "l" "Terça-feira" "e" "08:00" "s" "17:00" "b" "60" "t" "08:00")
+  (dict "n" "Qua" "l" "Quarta-feira" "e" "08:00" "s" "17:00" "b" "60" "t" "08:00")
+  (dict "n" "Qui" "l" "Quinta-feira" "e" "08:00" "s" "17:00" "b" "60" "t" "08:00")
+  (dict "n" "Sex" "l" "Sexta-feira" "e" "08:00" "s" "17:00" "b" "60" "t" "08:00")
+  (dict "n" "Sáb" "l" "Sábado" "e" "08:00" "s" "12:00" "b" "0" "t" "04:00")
+  (dict "n" "Dom" "l" "Domingo" "e" "" "s" "" "b" "0" "t" "--:--") -}}
+<section class="calc" id="calc" aria-labelledby="calc-titulo">
+  <h2 id="calc-titulo" class="sr">Calcule suas horas da semana</h2>
+  <div class="grid head" aria-hidden="true">
+    <span>Dia</span><span>Entrada</span><span>Saída</span><span>Pausa (min)</span><span>Total</span>
+  </div>
+  {{- range $days }}
+  <div class="grid row" data-row>
+    <span class="d" title="{{ .l }}">{{ .n }}</span>
+    <input class="e" type="time" value="{{ .e }}" aria-label="Entrada, {{ .l }}">
+    <input class="s" type="time" value="{{ .s }}" aria-label="Saída, {{ .l }}">
+    <input class="b" type="number" min="0" max="600" step="5" inputmode="numeric" value="{{ .b }}" aria-label="Pausa em minutos, {{ .l }}">
+    <output class="t">{{ .t }}</output>
+  </div>
+  {{- end }}
+  <div class="tools">
+    <label for="meta">Meta semanal (horas)</label>
+    <input id="meta" type="number" min="0" max="168" step="0.5" inputmode="decimal" value="44">
+    <button type="button" id="limpar">Limpar</button>
+  </div>
+  <div class="res" aria-live="polite">
+    <div class="total">
+      <span>Total da semana</span>
+      <strong id="r-total">44:00</strong>
+      <small id="r-dec">44,00 horas</small>
+    </div>
+    <dl>
+      <div><dt>Média por dia</dt><dd id="r-avg">07:20</dd></div>
+      <div><dt>Dias contados</dt><dd id="r-days">6</dd></div>
+      <div><dt>Saldo da meta</dt><dd id="r-bal">00:00</dd></div>
+    </dl>
+  </div>
+</section>
+{{- $js := resources.Get "js/calculator.js" | minify }}
+<script>{{ $js.Content | safeJS }}</script>

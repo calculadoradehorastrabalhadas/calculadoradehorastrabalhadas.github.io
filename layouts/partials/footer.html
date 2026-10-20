@@ -1,0 +1,12 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <nav aria-label="Rodapé">
+      <ul>
+      {{- range site.Menus.footer }}
+        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+      {{- end }}
+      </ul>
+    </nav>
+    <p>© {{ now.Year }} {{ site.Title }}. Conteúdo informativo, sem valor de consultoria jurídica.</p>
+  </div>
+</footer>

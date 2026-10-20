@@ -1,0 +1,2 @@
+{{- $a := site.Data.author -}}
+<p class="byline">Por <a href="/autor/">{{ $a.name }}</a>{{ if not .Lastmod.IsZero }} · Atualizado em <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "02/01/2006" }}</time>{{ end }}</p>
